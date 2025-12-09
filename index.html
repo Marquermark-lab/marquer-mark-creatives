@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marquer Mark Creatives</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background: #0a0a0a; color: #ccc; font-family: 'Inter', sans-serif; }
+    .grain { position: fixed; inset: 0; pointer-events:none; background:url('https://assets.codepen.io/13471/noise.png'); opacity:0.08; mix-blend-mode:overlay; }
+  </style>
+</head>
+<body class="relative">
+<div class="grain"></div>
+
+<!-- NAVIGATION -->
+<header class="p-6 flex justify-between items-center bg-black bg-opacity-40 backdrop-blur-md fixed top-0 left-0 w-full z-50">
+  <h1 class="text-2xl font-bold tracking-widest text-purple-400">Marquer Mark Creatives</h1>
+  <nav class="space-x-6 text-lg">
+    <a href="#home" class="hover:text-purple-400">Home</a>
+    <a href="#portfolio" class="hover:text-purple-400">Portfolio</a>
+    <a href="#services" class="hover:text-purple-400">Services</a>
+    <a href="#about" class="hover:text-purple-400">About</a>
+    <a href="#contact" class="hover:text-purple-400">Contact</a>
+    <a href="#dashboard" class="hover:text-purple-400">Dashboard</a>
+  </nav>
+</header>
+
+<!-- HOME -->
+<section id="home" class="h-screen flex flex-col justify-center items-center text-center px-4">
+  <h2 class="text-5xl font-bold mb-4 text-purple-300">Cinematic Stories. Timeless Frames.</h2>
+  <p class="text-xl max-w-2xl text-gray-400">A filmmaker's journey through vision, motion, and emotion. Welcome to the archive of crafted worlds.</p>
+</section>
+
+<!-- PORTFOLIO (Dynamic from media.json) -->
+<section id="portfolio" class="py-20 px-6 bg-black bg-opacity-40">
+  <h2 class="text-4xl font-bold mb-10 text-purple-300">Portfolio</h2>
+  <div id="portfolioGrid" class="grid md:grid-cols-3 gap-8"></div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="py-20 px-6">
+  <h2 class="text-4xl font-bold mb-10 text-purple-300">Services</h2>
+  <ul class="space-y-6 text-lg">
+    <li>🎬 Cinematography & Directing</li>
+    <li>🖥 Video Editing & Color Grading</li>
+    <li>📸 Photography</li>
+    <li>🎞 Motion Graphics</li>
+  </ul>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-20 px-6 bg-black bg-opacity-40">
+  <h2 class="text-4xl font-bold mb-10 text-purple-300">About</h2>
+  <p class="max-w-3xl text-gray-300 text-lg leading-relaxed">Marquer Mark is a filmmaker and creative storyteller specializing in cinematic visuals and grounded emotional narratives. With experience across documentaries, short films, and visual content, the goal is simple: tell stories that last.</p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-20 px-6">
+  <h2 class="text-4xl font-bold mb-10 text-purple-300">Contact</h2>
+  <form action="mailto:example@email.com" method="POST" enctype="text/plain" class="max-w-xl space-y-4">
+    <input class="w-full p-3 bg-gray-800" placeholder="Your Name" required>
+    <input class="w-full p-3 bg-gray-800" placeholder="Email" required>
+    <textarea class="w-full p-3 bg-gray-800" rows="5" placeholder="Message"></textarea>
+    <button class="px-6 py-3 bg-purple-600 hover:bg-purple-700">Send</button>
+  </form>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="py-20 px-6 bg-black bg-opacity-60">
+  <h2 class="text-4xl font-bold mb-10 text-purple-300">Dashboard</h2>
+
+  <div class="bg-gray-900 p-6 max-w-3xl rounded-xl">
+    <h3 class="text-2xl mb-4">Add New Project</h3>
+    <input id="titleInput" class="w-full p-3 bg-gray-800 mb-3" placeholder="Project Title">
+    <input id="descInput" class="w-full p-3 bg-gray-800 mb-3" placeholder="Description">
+    <input id="thumbInput" class="w-full p-3 bg-gray-800 mb-3" placeholder="OneDrive Thumbnail Link">
+    <input id="videoInput" class="w-full p-3 bg-gray-800 mb-3" placeholder="OneDrive Video Link">
+    <button onclick="addProject()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 w-full">Add Project</button>
+  </div>
+
+  <p class="mt-6 text-gray-400 text-sm">⚠ Dashboard writes to <strong>media.json</strong>. You must upload the generated file to GitHub manually.</p>
+
+  <textarea id="jsonOutput" class="w-full h-64 mt-4 bg-gray-800 p-4"></textarea>
+</section>
+
+<script>
+async function loadPortfolio() {
+  const res = await fetch('media.json');
+  const data = await res.json();
+  const grid = document.getElementById('portfolioGrid');
+  grid.innerHTML = '';
+  data.projects.forEach(p => {
+    grid.innerHTML += `
+      <div class='bg-gray-900 p-4 rounded-xl'>
+        <img src='${p.thumbnail}' class='w-full h-48 object-cover rounded'>
+        <h3 class='text-xl mt-3 text-purple-300'>${p.title}</h3>
+        <p class='text-gray-400 text-sm'>${p.description}</p>
+        <a href='${p.video}' target='_blank' class='text-purple-400 underline mt-2 inline-block'>View Video</a>
+      </div>`;
+  });
+}
+loadPortfolio();
+
+function convertOneDrive(link) {
+  const match = link.match(/resid=([^&]+)/);
+  return match ? `https://onedrive.live.com/download?resid=${match[1]}` : link;
+}
+
+function addProject() {
+  let title = document.getElementById('titleInput').value;
+  let desc = document.getElementById('descInput').value;
+  let thumb = convertOneDrive(document.getElementById('thumbInput').value);
+  let video = convertOneDrive(document.getElementById('videoInput').value);
+
+  let project = { title, description: desc, thumbnail: thumb, video };
+
+  let current = { projects: [] };
+  try { current = JSON.parse(document.getElementById('jsonOutput').value || '{}'); } catch{}
+  if (!current.projects) current.projects = [];
+
+  current.projects.push(project);
+  document.getElementById('jsonOutput').value = JSON.stringify(current, null, 2);
+}
+</script>
+
+</body>
+</html>
