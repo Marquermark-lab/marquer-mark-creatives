@@ -1,3 +1,14 @@
 {
   "projects": []
 }
+{
+  "projects": [
+    {
+      "title": "Thika Documentary",
+      "thumbnail": "https://via.placeholder.com/600x400?text=Thika+Doc",
+      "description": "A documentary exploring Thika's business landscape.",
+      "year": "2024",
+      "tags": ["Documentary", "Editing", "Cinematic"]
+    }
+  ]
+}
