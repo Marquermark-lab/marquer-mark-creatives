@@ -6,66 +6,72 @@
 <title>Marquer Mark Creatives</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* Base */
-  * { box-sizing:border-box; margin:0; padding:0; font-family:'Roboto', sans-serif; }
-  body { background:#121212; color:#f0f0f0; }
+/* Base */
+* { box-sizing:border-box; margin:0; padding:0; font-family:'Roboto', sans-serif; }
+body { background:#181818; color:#f0f0f0; transition: background 0.5s; }
 
-  /* Sidebar */
-  .sidebar {
-    position: fixed; top:0; left:0; width: 250px; height: 100vh;
-    background:#1b1b1b; display:flex; flex-direction:column;
-    justify-content:space-between; padding:20px; border-right:1px solid #333; z-index:1000;
+/* Sidebar */
+.sidebar {
+  position: fixed; top:0; left:0; width:250px; height:100vh;
+  background: linear-gradient(180deg,#1c1c1c,#282828);
+  display:flex; flex-direction:column; justify-content:space-between;
+  padding:20px; border-right:1px solid #444; box-shadow: 2px 0 10px rgba(0,0,0,0.7); z-index:1000;
+}
+.sidebar h2 { margin-bottom:30px; font-size:1.5em; color:#ffcc66; text-shadow: 0 0 5px #ffcc66; }
+.nav-links a {
+  display:block; padding:10px 0; font-weight:500; color:#fff; text-decoration:none;
+  transition:0.3s; text-shadow: 0 0 2px rgba(255,255,255,0.2);
+}
+.nav-links a:hover { color:#ff5252; text-shadow:0 0 8px #ff5252; }
+.personal-info { margin-top:auto; font-size:0.9em; color:#ccc; }
+.personal-info p { margin-bottom:5px; display:flex; align-items:center; gap:5px; }
+
+/* Toggle button for mobile */
+.toggle-btn { display:none; }
+@media(max-width:768px){
+  .sidebar{ position:fixed; left:-260px; transition:0.3s;}
+  .sidebar.active{ left:0; }
+  .toggle-btn{
+    display:block; position:fixed; top:20px; left:20px;
+    background:#ff5252; color:#fff; border:none; padding:10px;
+    z-index:1001; cursor:pointer; border-radius:5px; box-shadow:0 0 10px rgba(255,0,0,0.5);
   }
-  .sidebar h2 { margin-bottom:30px; font-size:1.5em; color:#fff; }
-  .nav-links a { display:block; padding:10px 0; font-weight:500; transition:0.3s; color:#f0f0f0; text-decoration:none;}
-  .nav-links a:hover { color:#ff5252; }
-  .personal-info { margin-top:auto; font-size:0.9em; }
-  .personal-info p { margin-bottom:5px; display:flex; align-items:center; gap:5px; }
+  .main{ margin-left:0; padding-top:80px; }
+}
 
-  /* Toggle button for mobile */
-  .toggle-btn { display:none; }
-  @media(max-width:768px){
-    .sidebar{ position:fixed; left:-260px; transition:0.3s;}
-    .sidebar.active{ left:0; }
-    .toggle-btn{
-      display:block; position:fixed; top:20px; left:20px;
-      background:#ff5252; color:#fff; border:none; padding:10px;
-      z-index:1001; cursor:pointer; border-radius:5px;
-    }
-    .main{ margin-left:0; padding-top:80px; }
-  }
+/* Main content */
+.main { margin-left:250px; padding:40px; transition: margin 0.3s; }
+h1,h2,h3 { margin-bottom:15px; }
 
-  /* Main content */
-  .main { margin-left:250px; padding:40px; }
-  h1,h2,h3 { margin-bottom:15px; }
+/* Sections */
+.section { display:none; position:relative; min-height:80vh; transition: opacity 0.5s; }
+#home { display:block; padding:60px 40px; border-radius:10px; background: radial-gradient(circle at top left,#2a2a2a,#181818); box-shadow: inset 0 0 100px rgba(255,255,255,0.05); }
+#home h1 { color:#ffcc66; text-shadow:0 0 10px #ffcc66; }
+#home p { color:#ddd; text-shadow:0 0 5px rgba(255,255,255,0.1); }
 
-  /* Sections */
-  .section { display:none; position:relative; min-height:80vh; }
-  #home { display:block; z-index:1; }
+/* Portfolio */
+.portfolio { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:20px; margin-top:20px; }
+.card {
+  background: linear-gradient(135deg,#1c1c1c,#2a2a2a);
+  padding:15px; border-radius:10px; border:2px solid #333; transition:0.3s; position:relative;
+  box-shadow: 0 0 15px rgba(255,255,255,0.05);
+}
+.card:hover { border-color:#ff5252; box-shadow:0 0 20px rgba(255,82,82,0.4); transform: translateY(-5px);}
+.card h3 { color:#ffcc66; }
+.card p { color:#ddd; }
+.card a { color:#ff5252; font-weight:500; }
 
-  /* Film overlay for Home */
-  .film-overlay {
-    position:absolute; top:0; left:0; width:100%; height:100%;
-    pointer-events:none;
-    background: url('https://i.ibb.co/7J7vKZ2/film-grain.png') repeat;
-    opacity:0.1; z-index:0;
-  }
-  #home-content { position:relative; z-index:1; }
+/* Admin Add Project Form */
+.admin-form { margin-top:20px; padding:15px; background: linear-gradient(135deg,#1c1c1c,#2a2a2a); border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.3);}
+.admin-form input, .admin-form textarea { width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #333; background:#222; color:#f0f0f0;}
+.admin-form button { background:#ff5252; color:#fff; border:none; padding:10px 20px; cursor:pointer; border-radius:5px; box-shadow:0 0 10px rgba(255,82,82,0.4);}
+.admin-form button:hover { box-shadow:0 0 15px rgba(255,82,82,0.7); }
 
-  /* Portfolio */
-  .portfolio { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
-  .card {
-    background:#1e1e1e; padding:15px; border-radius:10px;
-    border:2px solid #333; transition:0.3s; position:relative;
-  }
-  .card:hover { border-color:#ff5252; transform: translateY(-5px); }
-  .card img { width:100%; border-radius:5px; margin-bottom:10px; }
-  .card a { display:inline-block; margin-top:10px; color:#ff5252; font-weight:500; }
-
-  /* Submission form */
-  .submission-form { margin-top:30px; padding:20px; background:#1e1e1e; border-radius:10px; }
-  .submission-form input, .submission-form textarea { width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #333; background:#121212; color:#f0f0f0; }
-  .submission-form button { background:#ff5252; color:#fff; border:none; padding:10px 20px; cursor:pointer; border-radius:5px; }
+/* Collaborator Submission Form */
+.submission-form { margin-top:30px; padding:20px; background: linear-gradient(135deg,#1c1c1c,#2a2a2a); border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.3);}
+.submission-form input, .submission-form textarea { width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #333; background:#222; color:#f0f0f0; }
+.submission-form button { background:#ff5252; color:#fff; border:none; padding:10px 20px; cursor:pointer; border-radius:5px; box-shadow:0 0 10px rgba(255,82,82,0.4); }
+.submission-form button:hover { box-shadow:0 0 15px rgba(255,82,82,0.7); }
 </style>
 </head>
 <body>
@@ -91,41 +97,47 @@
 
 <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 
-<!-- Main Content -->
+<!-- Main content -->
 <div class="main">
-  <!-- Home Section -->
+  <!-- Home -->
   <section class="section" id="home">
-    <div id="home-content">
-      <h1>Welcome to Marquer Mark Creatives</h1>
-      <p>Cinematic portfolio & personal brand.</p>
-    </div>
-    <div class="film-overlay"></div>
+    <h1>Welcome to Marquer Mark Creatives</h1>
+    <p>Bringing cinematic storytelling to life.</p>
   </section>
 
-  <!-- Portfolio Section -->
+  <!-- Portfolio -->
   <section class="section" id="portfolio">
     <h2>Portfolio</h2>
     <div class="portfolio" id="portfolioContainer"></div>
 
+    <!-- Admin Add Project -->
+    <div class="admin-form">
+      <h3>Admin: Add Project</h3>
+      <input type="text" id="adminTitle" placeholder="Project Title">
+      <input type="url" id="adminLink" placeholder="Project Link">
+      <textarea id="adminDesc" rows="3" placeholder="Description"></textarea>
+      <button onclick="addAdminProject()">Add Project</button>
+    </div>
+
+    <!-- Collaborator Submission Form -->
     <div class="submission-form">
       <h3>Submit Your Work (Pending Approval)</h3>
       <input type="text" id="submitName" placeholder="Your Name">
       <input type="text" id="submitTitle" placeholder="Project Title">
       <input type="url" id="submitLink" placeholder="Project Link (public)">
-      <input type="url" id="submitThumbnail" placeholder="Thumbnail Image Link">
       <textarea id="submitDesc" rows="3" placeholder="Description"></textarea>
       <button onclick="submitWork()">Submit</button>
       <p id="submitMsg" style="margin-top:10px;"></p>
     </div>
   </section>
 
-  <!-- About Section -->
+  <!-- About -->
   <section class="section" id="about">
     <h2>About Me</h2>
     <p>I am Mark Mutugi, a filmmaker and creative professional specializing in cinematic storytelling, editing, and portfolio curation.</p>
   </section>
 
-  <!-- Contact Section -->
+  <!-- Contact -->
   <section class="section" id="contact">
     <h2>Contact</h2>
     <p>Email: marquermark345@gmail.com</p>
@@ -134,7 +146,7 @@
 </div>
 
 <script>
-// Toggle sidebar on mobile
+// Sidebar toggle
 function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('active');
 }
@@ -153,7 +165,7 @@ function showSection(sectionId) {
   });
 }
 
-// Show Home by default
+// Show home by default
 document.addEventListener('DOMContentLoaded', ()=>{ showSection('home'); });
 
 // Load portfolio from JSON
@@ -164,33 +176,49 @@ fetch('gallery-projects.json')
     data.forEach(item => {
       const card = document.createElement('div');
       card.className = "card";
-      card.innerHTML = `
-        <img src="${item.thumbnail}" alt="${item.title}">
-        <h3>${item.title}</h3>
-        <p>${item.description}</p>
-        <a href="${item.media}" target="_blank">View Work</a>
-      `;
+      card.innerHTML = `<h3>${item.title}</h3><p>${item.description}</p><a href="${item.media}" target="_blank">View Work</a>`;
       container.appendChild(card);
     });
   })
   .catch(err => console.error("Failed to load portfolio:", err));
 
-// Handle submission form (for approval workflow)
+// Admin add project function
+function addAdminProject(){
+  const title = document.getElementById('adminTitle').value;
+  const link = document.getElementById('adminLink').value;
+  const desc = document.getElementById('adminDesc').value;
+  const container = document.getElementById('portfolioContainer');
+
+  if(!title || !link || !desc){
+    alert("Please fill all fields");
+    return;
+  }
+
+  const card = document.createElement('div');
+  card.className="card";
+  card.innerHTML = `<h3>${title}</h3><p>${desc}</p><a href="${link}" target="_blank">View Work</a>`;
+  container.appendChild(card);
+
+  // Clear inputs
+  document.getElementById('adminTitle').value='';
+  document.getElementById('adminLink').value='';
+  document.getElementById('adminDesc').value='';
+}
+
+// Collaborator submission form
 function submitWork() {
   const name = document.getElementById('submitName').value;
   const title = document.getElementById('submitTitle').value;
   const link = document.getElementById('submitLink').value;
-  const thumb = document.getElementById('submitThumbnail').value;
   const desc = document.getElementById('submitDesc').value;
   const msg = document.getElementById('submitMsg');
 
-  if(!name || !title || !link || !thumb || !desc){
+  if(!name || !title || !link || !desc){
     msg.textContent = "Please fill all fields.";
     msg.style.color = "red";
     return;
   }
 
-  // For now, just display a message
   msg.textContent = "Submission received! Pending approval.";
   msg.style.color = "lightgreen";
 
@@ -198,10 +226,7 @@ function submitWork() {
   document.getElementById('submitName').value="";
   document.getElementById('submitTitle').value="";
   document.getElementById('submitLink').value="";
-  document.getElementById('submitThumbnail').value="";
   document.getElementById('submitDesc').value="";
-
-  // In a real system, you would save this to a database or JSON for admin approval
 }
 </script>
 
