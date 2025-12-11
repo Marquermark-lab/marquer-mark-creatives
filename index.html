@@ -1,127 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marquer Mark Creatives</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    body { background: #0a0a0a; color: #ccc; font-family: 'Inter', sans-serif; }
-    .grain { position: fixed; inset: 0; pointer-events:none; background:url('https://assets.codepen.io/13471/noise.png'); opacity:0.08; mix-blend-mode:overlay; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marquer Mark Creatives</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* --- Reset & Base --- */
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+  body { background: #121212; color: #f0f0f0; }
+  a { text-decoration: none; color: inherit; }
+
+  /* --- Sidebar --- */
+  .sidebar {
+    position: fixed; top:0; left:0; width: 250px; height: 100vh; background: #1b1b1b;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 20px; border-right: 1px solid #333; z-index: 1000;
+  }
+  .sidebar h2 { margin-bottom: 30px; font-size: 1.5em; color: #fff; }
+  .nav-links a { display:block; padding:10px 0; font-weight:500; transition:0.3s; }
+  .nav-links a:hover { color:#ff5252; }
+  .personal-info { margin-top:auto; font-size:0.9em; }
+  .personal-info p { margin-bottom:5px; display:flex; align-items:center; gap:5px; }
+
+  /* --- Main Content --- */
+  .main {
+    margin-left: 250px; padding: 40px;
+  }
+  h1,h2,h3 { margin-bottom:15px; }
+  
+  /* --- Portfolio Section --- */
+  .portfolio { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+  .card {
+    background:#1e1e1e; padding:15px; border-radius:10px;
+    border:2px solid #333; transition:0.3s; position:relative;
+  }
+  .card:hover { border-color:#ff5252; transform: translateY(-5px); }
+  .card img { width:100%; border-radius:5px; margin-bottom:10px; }
+  .card a { display:inline-block; margin-top:10px; color:#ff5252; font-weight:500; }
+
+  /* --- SVG Icons --- */
+  .icon { width:20px; height:20px; fill:#ff5252; margin-right:5px; }
+
+  /* --- Responsive --- */
+  @media(max-width:768px){
+    .sidebar{ position:fixed; left:-260px; transition:0.3s;}
+    .sidebar.active{ left:0; }
+    .main{ margin-left:0; padding:20px;}
+    .toggle-btn{ position:fixed; top:20px; left:20px; background:#ff5252; color:#fff; border:none; padding:10px; z-index:1001; cursor:pointer; border-radius:5px;}
+  }
+</style>
 </head>
-<body class="relative">
-<div class="grain"></div>
+<body>
 
-<!-- NAVIGATION -->
-<header class="p-6 flex justify-between items-center bg-black bg-opacity-40 backdrop-blur-md fixed top-0 left-0 w-full z-50">
-  <h1 class="text-2xl font-bold tracking-widest text-purple-400">Marquer Mark Creatives</h1>
-  <nav class="space-x-6 text-lg">
-    <a href="#home" class="hover:text-purple-400">Home</a>
-    <a href="#portfolio" class="hover:text-purple-400">Portfolio</a>
-    <a href="#services" class="hover:text-purple-400">Services</a>
-    <a href="#about" class="hover:text-purple-400">About</a>
-    <a href="#contact" class="hover:text-purple-400">Contact</a>
-    <a href="#dashboard" class="hover:text-purple-400">Dashboard</a>
-  </nav>
-</header>
-
-<!-- HOME -->
-<section id="home" class="h-screen flex flex-col justify-center items-center text-center px-4">
-  <h2 class="text-5xl font-bold mb-4 text-purple-300">Cinematic Stories. Timeless Frames.</h2>
-  <p class="text-xl max-w-2xl text-gray-400">A filmmaker's journey through vision, motion, and emotion. Welcome to the archive of crafted worlds.</p>
-</section>
-
-<!-- PORTFOLIO (Dynamic from media.json) -->
-<section id="portfolio" class="py-20 px-6 bg-black bg-opacity-40">
-  <h2 class="text-4xl font-bold mb-10 text-purple-300">Portfolio</h2>
-  <div id="portfolioGrid" class="grid md:grid-cols-3 gap-8"></div>
-</section>
-
-<!-- SERVICES -->
-<section id="services" class="py-20 px-6">
-  <h2 class="text-4xl font-bold mb-10 text-purple-300">Services</h2>
-  <ul class="space-y-6 text-lg">
-    <li>🎬 Cinematography & Directing</li>
-    <li>🖥 Video Editing & Color Grading</li>
-    <li>📸 Photography</li>
-    <li>🎞 Motion Graphics</li>
-  </ul>
-</section>
-
-<!-- ABOUT -->
-<section id="about" class="py-20 px-6 bg-black bg-opacity-40">
-  <h2 class="text-4xl font-bold mb-10 text-purple-300">About</h2>
-  <p class="max-w-3xl text-gray-300 text-lg leading-relaxed">Marquer Mark is a filmmaker and creative storyteller specializing in cinematic visuals and grounded emotional narratives. With experience across documentaries, short films, and visual content, the goal is simple: tell stories that last.</p>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="py-20 px-6">
-  <h2 class="text-4xl font-bold mb-10 text-purple-300">Contact</h2>
-  <form action="mailto:example@email.com" method="POST" enctype="text/plain" class="max-w-xl space-y-4">
-    <input class="w-full p-3 bg-gray-800" placeholder="Your Name" required>
-    <input class="w-full p-3 bg-gray-800" placeholder="Email" required>
-    <textarea class="w-full p-3 bg-gray-800" rows="5" placeholder="Message"></textarea>
-    <button class="px-6 py-3 bg-purple-600 hover:bg-purple-700">Send</button>
-  </form>
-</section>
-
-<!-- DASHBOARD -->
-<section id="dashboard" class="py-20 px-6 bg-black bg-opacity-60">
-  <h2 class="text-4xl font-bold mb-10 text-purple-300">Dashboard</h2>
-
-  <div class="bg-gray-900 p-6 max-w-3xl rounded-xl">
-    <h3 class="text-2xl mb-4">Add New Project</h3>
-    <input id="titleInput" class="w-full p-3 bg-gray-800 mb-3" placeholder="Project Title">
-    <input id="descInput" class="w-full p-3 bg-gray-800 mb-3" placeholder="Description">
-    <input id="thumbInput" class="w-full p-3 bg-gray-800 mb-3" placeholder="OneDrive Thumbnail Link">
-    <input id="videoInput" class="w-full p-3 bg-gray-800 mb-3" placeholder="OneDrive Video Link">
-    <button onclick="addProject()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 w-full">Add Project</button>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div>
+    <h2>Marquer Mark</h2>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
   </div>
+  <div class="personal-info">
+    <p>🎬 Mark Mutugi</p>
+    <p>📞 +25498160452</p>
+    <p>📧 marquermark345@gmail.com</p>
+  </div>
+</div>
 
-  <p class="mt-6 text-gray-400 text-sm">⚠ Dashboard writes to <strong>media.json</strong>. You must upload the generated file to GitHub manually.</p>
+<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 
-  <textarea id="jsonOutput" class="w-full h-64 mt-4 bg-gray-800 p-4"></textarea>
-</section>
+<!-- Main Content -->
+<div class="main">
+  <section id="home">
+    <h1>Welcome to Marquer Mark Creatives</h1>
+    <p>Cinematic portfolio & personal brand.</p>
+  </section>
+
+  <section id="portfolio">
+    <h2>Portfolio</h2>
+    <div class="portfolio" id="portfolioContainer">
+      <!-- Projects loaded via JS -->
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I am Mark Mutugi, a filmmaker and creative professional specializing in cinematic storytelling, editing, and portfolio curation.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Email: marquermark345@gmail.com</p>
+    <p>Phone: +25498160452</p>
+  </section>
+</div>
 
 <script>
-async function loadPortfolio() {
-  const res = await fetch('media.json');
-  const data = await res.json();
-  const grid = document.getElementById('portfolioGrid');
-  grid.innerHTML = '';
-  data.projects.forEach(p => {
-    grid.innerHTML += `
-      <div class='bg-gray-900 p-4 rounded-xl'>
-        <img src='${p.thumbnail}' class='w-full h-48 object-cover rounded'>
-        <h3 class='text-xl mt-3 text-purple-300'>${p.title}</h3>
-        <p class='text-gray-400 text-sm'>${p.description}</p>
-        <a href='${p.video}' target='_blank' class='text-purple-400 underline mt-2 inline-block'>View Video</a>
-      </div>`;
-  });
-}
-loadPortfolio();
-
-function convertOneDrive(link) {
-  const match = link.match(/resid=([^&]+)/);
-  return match ? `https://onedrive.live.com/download?resid=${match[1]}` : link;
+/* --- Sidebar Toggle for Mobile --- */
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('active');
 }
 
-function addProject() {
-  let title = document.getElementById('titleInput').value;
-  let desc = document.getElementById('descInput').value;
-  let thumb = convertOneDrive(document.getElementById('thumbInput').value);
-  let video = convertOneDrive(document.getElementById('videoInput').value);
+/* --- Sample Portfolio Loading --- */
+const portfolioData = [
+  {
+    title: "Sample Video",
+    media: "https://mkuac-my.sharepoint.com/:v:/g/personal/bfas202371900_mylife_mku_ac_ke/IQAjUQEPmLjQRbRWCrsLBaKrAWJyVssazx5WivJS2OyCgc0?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=R5b7tR",
+    description: "Test video from OneDrive",
+    thumbnail: "https://via.placeholder.com/400x225?text=Video+Thumbnail"
+  }
+];
 
-  let project = { title, description: desc, thumbnail: thumb, video };
-
-  let current = { projects: [] };
-  try { current = JSON.parse(document.getElementById('jsonOutput').value || '{}'); } catch{}
-  if (!current.projects) current.projects = [];
-
-  current.projects.push(project);
-  document.getElementById('jsonOutput').value = JSON.stringify(current, null, 2);
-}
+/* --- Populate Portfolio --- */
+const container = document.getElementById('portfolioContainer');
+portfolioData.forEach(item=>{
+  const card = document.createElement('div');
+  card.className="card";
+  card.innerHTML=`
+    <img src="${item.thumbnail}" alt="${item.title}">
+    <h3>${item.title}</h3>
+    <p>${item.description}</p>
+    <a href="${item.media}" target="_blank">View Work</a>
+  `;
+  container.appendChild(card);
+});
 </script>
 
 </body>
