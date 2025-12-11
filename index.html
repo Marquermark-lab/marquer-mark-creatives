@@ -6,18 +6,18 @@
 <title>Marquer Mark Creatives</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* Reset & base */
-  * { box-sizing:border-box; margin:0; padding:0; font-family: 'Roboto', sans-serif; }
+  /* Base */
+  * { box-sizing:border-box; margin:0; padding:0; font-family:'Roboto', sans-serif; }
   body { background:#121212; color:#f0f0f0; }
 
   /* Sidebar */
   .sidebar {
     position: fixed; top:0; left:0; width: 250px; height: 100vh;
-    background: #1b1b1b; display:flex; flex-direction: column;
-    justify-content: space-between; padding:20px; border-right:1px solid #333; z-index:1000;
+    background:#1b1b1b; display:flex; flex-direction:column;
+    justify-content:space-between; padding:20px; border-right:1px solid #333; z-index:1000;
   }
   .sidebar h2 { margin-bottom:30px; font-size:1.5em; color:#fff; }
-  .nav-links a { display:block; padding:10px 0; font-weight:500; transition:0.3s; color:#f0f0f0; }
+  .nav-links a { display:block; padding:10px 0; font-weight:500; transition:0.3s; color:#f0f0f0; text-decoration:none;}
   .nav-links a:hover { color:#ff5252; }
   .personal-info { margin-top:auto; font-size:0.9em; }
   .personal-info p { margin-bottom:5px; display:flex; align-items:center; gap:5px; }
@@ -32,6 +32,7 @@
       background:#ff5252; color:#fff; border:none; padding:10px;
       z-index:1001; cursor:pointer; border-radius:5px;
     }
+    .main{ margin-left:0; padding-top:80px; }
   }
 
   /* Main content */
@@ -39,7 +40,8 @@
   h1,h2,h3 { margin-bottom:15px; }
 
   /* Sections */
-  .section { display:none; position: relative; }
+  .section { display:none; position:relative; min-height:80vh; }
+  #home { display:block; z-index:1; }
 
   /* Film overlay for Home */
   .film-overlay {
@@ -48,8 +50,7 @@
     background: url('https://i.ibb.co/7J7vKZ2/film-grain.png') repeat;
     opacity:0.1; z-index:0;
   }
-
-  #home { display:block; z-index:1; }
+  #home-content { position:relative; z-index:1; }
 
   /* Portfolio */
   .portfolio { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
@@ -60,6 +61,11 @@
   .card:hover { border-color:#ff5252; transform: translateY(-5px); }
   .card img { width:100%; border-radius:5px; margin-bottom:10px; }
   .card a { display:inline-block; margin-top:10px; color:#ff5252; font-weight:500; }
+
+  /* Submission form */
+  .submission-form { margin-top:30px; padding:20px; background:#1e1e1e; border-radius:10px; }
+  .submission-form input, .submission-form textarea { width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #333; background:#121212; color:#f0f0f0; }
+  .submission-form button { background:#ff5252; color:#fff; border:none; padding:10px 20px; cursor:pointer; border-radius:5px; }
 </style>
 </head>
 <body>
@@ -87,22 +93,39 @@
 
 <!-- Main Content -->
 <div class="main">
+  <!-- Home Section -->
   <section class="section" id="home">
-    <h1>Welcome to Marquer Mark Creatives</h1>
-    <p>Cinematic portfolio & personal brand.</p>
+    <div id="home-content">
+      <h1>Welcome to Marquer Mark Creatives</h1>
+      <p>Cinematic portfolio & personal brand.</p>
+    </div>
     <div class="film-overlay"></div>
   </section>
 
+  <!-- Portfolio Section -->
   <section class="section" id="portfolio">
     <h2>Portfolio</h2>
     <div class="portfolio" id="portfolioContainer"></div>
+
+    <div class="submission-form">
+      <h3>Submit Your Work (Pending Approval)</h3>
+      <input type="text" id="submitName" placeholder="Your Name">
+      <input type="text" id="submitTitle" placeholder="Project Title">
+      <input type="url" id="submitLink" placeholder="Project Link (public)">
+      <input type="url" id="submitThumbnail" placeholder="Thumbnail Image Link">
+      <textarea id="submitDesc" rows="3" placeholder="Description"></textarea>
+      <button onclick="submitWork()">Submit</button>
+      <p id="submitMsg" style="margin-top:10px;"></p>
+    </div>
   </section>
 
+  <!-- About Section -->
   <section class="section" id="about">
     <h2>About Me</h2>
     <p>I am Mark Mutugi, a filmmaker and creative professional specializing in cinematic storytelling, editing, and portfolio curation.</p>
   </section>
 
+  <!-- Contact Section -->
   <section class="section" id="contact">
     <h2>Contact</h2>
     <p>Email: marquermark345@gmail.com</p>
@@ -133,29 +156,53 @@ function showSection(sectionId) {
 // Show Home by default
 document.addEventListener('DOMContentLoaded', ()=>{ showSection('home'); });
 
-// Sample portfolio
-const portfolioData = [
-  {
-    title: "Sample Video",
-    media: "https://mkuac-my.sharepoint.com/:v:/g/personal/bfas202371900_mylife_mku_ac_ke/IQAjUQEPmLjQRbRWCrsLBaKrAWJyVssazx5WivJS2OyCgc0?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=R5b7tR",
-    description: "Test video from OneDrive",
-    thumbnail: "https://via.placeholder.com/400x225?text=Video+Thumbnail"
-  }
-];
+// Load portfolio from JSON
+fetch('gallery-projects.json')
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById('portfolioContainer');
+    data.forEach(item => {
+      const card = document.createElement('div');
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${item.thumbnail}" alt="${item.title}">
+        <h3>${item.title}</h3>
+        <p>${item.description}</p>
+        <a href="${item.media}" target="_blank">View Work</a>
+      `;
+      container.appendChild(card);
+    });
+  })
+  .catch(err => console.error("Failed to load portfolio:", err));
 
-// Populate portfolio
-const container = document.getElementById('portfolioContainer');
-portfolioData.forEach(item=>{
-  const card = document.createElement('div');
-  card.className="card";
-  card.innerHTML=`
-    <img src="${item.thumbnail}" alt="${item.title}">
-    <h3>${item.title}</h3>
-    <p>${item.description}</p>
-    <a href="${item.media}" target="_blank">View Work</a>
-  `;
-  container.appendChild(card);
-});
+// Handle submission form (for approval workflow)
+function submitWork() {
+  const name = document.getElementById('submitName').value;
+  const title = document.getElementById('submitTitle').value;
+  const link = document.getElementById('submitLink').value;
+  const thumb = document.getElementById('submitThumbnail').value;
+  const desc = document.getElementById('submitDesc').value;
+  const msg = document.getElementById('submitMsg');
+
+  if(!name || !title || !link || !thumb || !desc){
+    msg.textContent = "Please fill all fields.";
+    msg.style.color = "red";
+    return;
+  }
+
+  // For now, just display a message
+  msg.textContent = "Submission received! Pending approval.";
+  msg.style.color = "lightgreen";
+
+  // Clear inputs
+  document.getElementById('submitName').value="";
+  document.getElementById('submitTitle').value="";
+  document.getElementById('submitLink').value="";
+  document.getElementById('submitThumbnail').value="";
+  document.getElementById('submitDesc').value="";
+
+  // In a real system, you would save this to a database or JSON for admin approval
+}
 </script>
 
 </body>
