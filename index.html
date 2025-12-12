@@ -166,12 +166,11 @@ h1,h2,h3 { margin-bottom:15px; }
 
 </div>
 
-<!-- Firebase -->
 <script type="module">
-// Firebase App (the core Firebase SDK)
+// Firebase setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.26.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDmSo4844PNyJ-v8pcsgncF8YeHhI1_Dog",
@@ -194,26 +193,23 @@ function showSection(sectionId){
 }
 document.addEventListener('DOMContentLoaded', ()=>{ showSection('home'); });
 
-// Admin login
+// Admin login prompt using Firebase Auth
 let isAdmin = false;
-window.addEventListener('DOMContentLoaded', async () => {
-  const email = prompt("Admin Email (leave empty to continue as guest):");
-  if(email === "marquermark345@gmail.com"){
-    const password = prompt("Password:");
-    try {
-      await signInWithEmailAndPassword(auth,email,password);
-      isAdmin = true;
-      document.getElementById('adminForm').style.display = 'block';
-      loadPending();
-      alert("Admin access granted!");
-    } catch(e){ alert("Wrong credentials"); }
-  }
+async function adminLogin(){
+  const email = prompt("Admin Email:");
+  const password = prompt("Password:");
+  try{
+    await signInWithEmailAndPassword(auth,email,password);
+  }catch(e){ alert("Wrong credentials"); return; }
+}
+onAuthStateChanged(auth,user=>{
+  if(user){ isAdmin=true; document.getElementById('adminForm').style.display='block'; loadPending(); alert("Admin access granted!"); }
 });
 
 // Load approved portfolio
 async function loadPortfolio(){
   const container = document.getElementById('portfolioContainer');
-  container.innerHTML = '';
+  container.innerHTML='';
   const querySnapshot = await getDocs(collection(db,'submissions'));
   querySnapshot.forEach(docSnap=>{
     const data = docSnap.data();
