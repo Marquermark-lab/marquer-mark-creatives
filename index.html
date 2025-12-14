@@ -1,264 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Marquer Mark Creatives</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <!-- Google Font (cinematic, elegant) -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg: #0b0b0d;
-      --panel: #111217;
-      --accent: #d6b36a;
-      --soft: rgba(255,255,255,0.06);
-    }
-
-    * { box-sizing: border-box; margin:0; padding:0; }
-
-    body {
-      background: radial-gradient(circle at top, #14151c, #070709);
-      color: #eee;
-      font-family: Inter, sans-serif;
-      overflow-x: hidden;
-    }
-
-    /* CINEMATIC BACKGROUND */
-    .film-grain {
-      pointer-events: none;
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
-      z-index: 1;
-    }
-
-    .light {
-      position: fixed;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(214,179,106,.08), transparent 70%);
-      animation: drift 40s infinite alternate ease-in-out;
-      z-index: 0;
-    }
-
-    .light.one { top:-200px; left:-200px; }
-    .light.two { bottom:-250px; right:-250px; animation-duration: 55s; }
-
-    @keyframes drift {
-      from { transform: translate(0,0); }
-      to { transform: translate(200px,150px); }
-    }
-
-    /* LAYOUT */
-    .app {
-      display: flex;
-      min-height: 100vh;
-      position: relative;
-      z-index: 2;
-    }
-
-    aside {
-      width: 240px;
-      background: var(--panel);
-      padding: 30px 20px;
-      border-right: 1px solid var(--soft);
-    }
-
-    aside h1 {
-      font-family: Cinzel, serif;
-      font-size: 20px;
-      margin-bottom: 30px;
-      color: var(--accent);
-    }
-
-    nav button {
-      width: 100%;
-      background: none;
-      border: none;
-      color: #aaa;
-      text-align: left;
-      padding: 12px;
-      cursor: pointer;
-      transition: .3s;
-      font-size: 15px;
-    }
-
-    nav button:hover {
-      color: #fff;
-      background: rgba(255,255,255,.05);
-    }
-
-    main {
-      flex: 1;
-      padding: 60px;
-    }
-
-    section {
-      display: none;
-      animation: fadeUp .8s ease forwards;
-    }
-
-    section.active { display: block; }
-
-    @keyframes fadeUp {
-      from { opacity:0; transform: translateY(20px); }
-      to { opacity:1; transform: translateY(0); }
-    }
-
-    h2 {
-      font-family: Cinzel, serif;
-      font-size: 38px;
-      margin-bottom: 20px;
-    }
-
-    p {
-      max-width: 650px;
-      line-height: 1.7;
-      color: #ccc;
-    }
-
-    /* ADMIN PANEL */
-    #adminPanel {
-      margin-top: 40px;
-      padding: 20px;
-      border: 1px solid var(--soft);
-      background: rgba(255,255,255,.03);
-    }
-
-    .hidden { display:none; }
-
-    /* FORMS */
-    input, textarea {
-      width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-      background: #0f1016;
-      border: 1px solid var(--soft);
-      color: #fff;
-    }
-
-    button.primary {
-      background: var(--accent);
-      color: #000;
-      padding: 10px 18px;
-      border: none;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    @media(max-width:768px){
-      aside { display:none; }
-      main { padding:30px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marquer Mark Creatives</title>
+<style>
+  body { margin:0; overflow:hidden; font-family:sans-serif; background:#0a0a0a; color:#eee;}
+  .layer { position:absolute; width:200%; height:200%; top:-50%; left:-50%; pointer-events:none; }
+  .layer span { position:absolute; display:block; width:5px; height:5px; background:#fff; opacity:0.1; animation:float linear infinite;}
+  @keyframes float { from{transform:translate(0,0)} to{transform:translate(500px,500px)} }
+  .section { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; opacity:0; transition:opacity 1s;}
+  .active { opacity:1; }
+  button { padding:10px 15px; margin:5px; background:#d6b36a; border:none; cursor:pointer; }
+</style>
 </head>
-
 <body>
 
-<div class="film-grain"></div>
-<div class="light one"></div>
-<div class="light two"></div>
+<!-- Background layers -->
+<div class="layer" id="layer1"></div>
+<div class="layer" id="layer2"></div>
 
-<div class="app">
-
-  <aside>
-    <h1>Marquer Mark</h1>
-    <nav>
-      <button onclick="show('home')">Home</button>
-      <button onclick="show('about')">About</button>
-      <button onclick="show('portfolio')">Portfolio</button>
-      <button onclick="show('submit')">Submit Work</button>
-      <button onclick="show('contact')">Contact</button>
-      <button id="adminBtn" class="hidden" onclick="show('admin')">Admin Panel</button>
-    </nav>
-  </aside>
-
-  <main>
-    <section id="home" class="active">
-      <h2>Welcome to Marquer Mark Creatives</h2>
-      <p>
-        A cinematic space for storytelling, motion, and immersive visual experiences.
-        This is where ideas breathe, frames speak, and stories live beyond the screen.
-      </p>
-    </section>
-
-    <section id="about">
-      <h2>About</h2>
-      <p>
-        I am Mark Mutugi — a videographer and visual storyteller focused on motion,
-        atmosphere, and narrative-driven work. My practice leans heavily into
-        videography, documentary language, and cinematic composition.
-        <br><br>
-        I also work with 3D — Maya-based modeling, lighting, and lightweight animation —
-        to extend storytelling beyond the physical lens.
-        <br><br>
-        My vision is to bring stories and ideas to life in ways that immerse, connect,
-        and evolve with the ever-changing creative landscape.
-      </p>
-    </section>
-
-    <section id="portfolio">
-      <h2>Portfolio</h2>
-      <p>Approved works will appear here. Persistent, curated, and public.</p>
-    </section>
-
-    <section id="submit">
-      <h2>Submit Your Work</h2>
-      <p>Collaborators may submit their projects for review.</p>
-      <input placeholder="Name">
-      <input placeholder="Email">
-      <input placeholder="Project Link (OneDrive / YouTube / Vimeo)">
-      <textarea placeholder="Short description"></textarea>
-      <button class="primary">Submit</button>
-    </section>
-
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>
-        Email: marquermark345@gmail.com<br>
-        Phone: +25498160452
-      </p>
-    </section>
-
-    <section id="admin">
-      <h2>Admin Panel</h2>
-      <div id="adminPanel">
-        <p>Pending submissions will appear here for approval.</p>
-      </div>
-    </section>
-  </main>
-
+<!-- Sections -->
+<div id="home" class="section active">
+  <h1>Welcome to Marquer Mark Creatives</h1>
+  <button onclick="show('about')">About</button>
 </div>
 
+<div id="about" class="section">
+  <h1>About Me</h1>
+  <p>Filmmaker, 3D artist, cinematic storyteller.</p>
+  <button onclick="show('portfolio')">Portfolio</button>
+</div>
+
+<div id="portfolio" class="section">
+  <h1>Portfolio</h1>
+  <p>Approved works appear here.</p>
+  <button onclick="show('submit')">Submit Work</button>
+</div>
+
+<div id="submit" class="section">
+  <h1>Submit Your Work</h1>
+  <p>Collaborators can submit their projects for approval.</p>
+  <button onclick="show('home')">Back Home</button>
+</div>
+
+<div id="admin" class="section">
+  <h1>Admin Panel</h1>
+  <p>Pending submissions for approval.</p>
+</div>
+
+<!-- Admin login -->
 <script type="module">
-  // --- FIREBASE AUTH HOOK (LOGIC ONLY) ---
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCvz6Cqo-mN...",
-    authDomain: "marquer-mark-portfolios.firebaseapp.com",
-    projectId: "marquer-mark-portfolios"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyCvz6Cqo-mN...",
+  authDomain: "marquer-mark-portfolios.firebaseapp.com",
+  projectId: "marquer-mark-portfolios"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-  const ADMIN_EMAIL = "marquermark345@gmail.com";
+const ADMIN_EMAIL="marquermark345@gmail.com";
+const ADMIN_PASSWORD="marymiriti";
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+let adminLogged=false;
 
-  onAuthStateChanged(auth, (user) => {
-    if (user && user.email === ADMIN_EMAIL) {
-      document.getElementById("adminBtn").classList.remove("hidden");
-    }
-  });
+function adminLogin() {
+  signInWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD)
+    .then(() => { 
+      adminLogged=true;
+      show('admin');
+      alert("Admin logged in!");
+    })
+    .catch(e => alert("Login failed"));
+}
 
-  // --- NAV ---
-  window.show = (id) => {
-    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-  };
+// Section switching
+window.show = function(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='admin' && !adminLogged) adminLogin();
+}
+
+// Floating points
+function createLayer(id,num){
+  const layer=document.getElementById(id);
+  for(let i=0;i<num;i++){
+    const s=document.createElement('span');
+    s.style.left=Math.random()*100+"%";
+    s.style.top=Math.random()*100+"%";
+    s.style.animationDuration=(5+Math.random()*20)+"s";
+    s.style.width=s.style.height=(2+Math.random()*5)+"px";
+    layer.appendChild(s);
+  }
+}
+createLayer("layer1",50);
+createLayer("layer2",50);
 </script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
