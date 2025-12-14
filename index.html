@@ -1,176 +1,296 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
 <title>Marquer Mark Creatives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- CINEMATIC FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --bg: #0b0b0d;
-  --panel: #111217;
-  --accent: #d6b36a;
-  --soft: rgba(255,255,255,0.06);
+:root{
+  --gold:#d6b36a;
+  --dark:#07070a;
+  --soft:rgba(255,255,255,.06);
 }
 
-/* Reset */
-* { box-sizing:border-box; margin:0; padding:0; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-body {
-  font-family: Inter, sans-serif;
-  background: #0b0b0d;
+body{
+  background:radial-gradient(circle at top,#14151f,#050508);
   color:#eee;
-  overflow-x:hidden;
+  font-family:Inter,sans-serif;
+  overflow:hidden;
 }
 
-/* CINEMATIC BACKGROUND */
-.layer {
-  position: fixed; inset:0; z-index:0; pointer-events:none;
+/* ===== CINEMA ATMOSPHERE ===== */
+#atmosphere{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
 }
-.grain {
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23f)' opacity='0.04'/%3E%3C/svg%3E");
-  animation: grainMove 30s infinite alternate;
+
+.grain{
+  position:absolute;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");
+  animation:grainMove 6s infinite linear;
 }
-.light1 {
-  background: radial-gradient(circle, rgba(214,179,106,.08), transparent 70%);
-  top:-250px; left:-250px; width:600px; height:600px; animation: drift1 45s infinite alternate ease-in-out;
+
+@keyframes grainMove{
+  0%{transform:translate(0,0);}
+  100%{transform:translate(-50px,50px);}
 }
-.light2 {
-  background: radial-gradient(circle, rgba(255,82,82,.06), transparent 70%);
-  bottom:-200px; right:-200px; width:500px; height:500px; animation: drift2 60s infinite alternate ease-in-out;
+
+.light{
+  position:absolute;
+  width:900px;height:900px;
+  background:radial-gradient(circle,rgba(214,179,106,.09),transparent 70%);
+  filter:blur(40px);
+  animation:float 40s infinite alternate ease-in-out;
 }
-@keyframes grainMove { from{transform:translate(0,0);} to{transform:translate(50px,50px);} }
-@keyframes drift1 { from{transform:translate(0,0);} to{transform:translate(200px,150px);} }
-@keyframes drift2 { from{transform:translate(0,0);} to{transform:translate(-180px,-120px);} }
 
-/* App Layout */
-.app { display:flex; min-height:100vh; position:relative; z-index:1; }
-aside {
-  width:240px; background:var(--panel); padding:30px 20px; border-right:1px solid var(--soft);
+.light.one{top:-300px;left:-300px;}
+.light.two{bottom:-350px;right:-350px;animation-duration:55s;}
+.light.three{top:30%;left:60%;animation-duration:70s;}
+
+@keyframes float{
+  from{transform:translate(0,0);}
+  to{transform:translate(250px,180px);}
 }
-aside h1 { font-family:Cinzel, serif; color:var(--accent); font-size:22px; margin-bottom:30px; }
-nav button {
-  display:block; width:100%; padding:12px; margin-bottom:8px;
-  background:none; border:none; color:#aaa; text-align:left; cursor:pointer;
-  transition:.3s;
+
+/* ===== APP LAYOUT ===== */
+.app{
+  position:relative;
+  z-index:2;
+  display:flex;
+  height:100vh;
 }
-nav button:hover { color:#fff; background:rgba(255,255,255,0.05);}
-main { flex:1; padding:50px; }
-section { display:none; opacity:0; transition:opacity 0.5s ease; position:relative; }
-section.active { display:block; opacity:1; }
 
-/* Typography & content */
-h2 { font-family:Cinzel, serif; font-size:36px; margin-bottom:20px; }
-p { line-height:1.6; max-width:650px; margin-bottom:15px; color:#ccc; }
+aside{
+  width:240px;
+  padding:40px 25px;
+  background:linear-gradient(to bottom,rgba(15,16,22,.95),rgba(8,9,12,.9));
+  border-right:1px solid var(--soft);
+}
 
-/* Admin Panel */
-#adminPanel { background:rgba(255,255,255,0.03); padding:15px; border:1px solid var(--soft); margin-top:20px; }
-.hidden { display:none; }
+aside h1{
+  font-family:Playfair Display,serif;
+  color:var(--gold);
+  font-size:20px;
+  margin-bottom:40px;
+  letter-spacing:1px;
+}
 
-/* Forms */
-input, textarea { width:100%; padding:10px; margin-bottom:10px; background:#0f1016; border:1px solid var(--soft); color:#fff; }
-button.primary { background:var(--accent); color:#000; border:none; padding:10px 15px; cursor:pointer; }
-button.primary:hover { filter:brightness(1.1); }
+nav button{
+  display:block;
+  width:100%;
+  background:none;
+  border:none;
+  color:#aaa;
+  text-align:left;
+  padding:14px 10px;
+  font-size:15px;
+  cursor:pointer;
+  transition:.4s;
+}
 
-/* Floating cinematic text */
-.floating-text { position:absolute; font-family:Cinzel, serif; font-size:24px; color:rgba(214,179,106,0.07); pointer-events:none; animation: floatText 40s linear infinite; }
-@keyframes floatText { 0%{transform:translate(0,0);} 50%{transform:translate(200px,50px);} 100%{transform:translate(0,0);} }
+nav button:hover{
+  color:#fff;
+  letter-spacing:.5px;
+}
 
-@media(max-width:768px){ aside{display:none;} main{padding:30px;} }
+main{
+  flex:1;
+  padding:70px 80px;
+  overflow:hidden;
+}
+
+/* ===== SECTIONS AS SCENES ===== */
+.scene{
+  position:absolute;
+  inset:0;
+  padding:70px 80px;
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 1.2s ease,transform 1.2s ease;
+}
+
+.scene.active{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+
+h2{
+  font-family:Playfair Display,serif;
+  font-size:48px;
+  margin-bottom:20px;
+}
+
+p{
+  max-width:720px;
+  line-height:1.9;
+  font-size:17px;
+  color:#ccc;
+}
+
+/* ===== TEXT BREATHING ===== */
+.breathe{
+  animation:breathe 6s infinite ease-in-out;
+}
+
+@keyframes breathe{
+  0%,100%{opacity:.85;}
+  50%{opacity:1;}
+}
+
+/* ===== FORMS ===== */
+input,textarea{
+  width:100%;
+  background:#0d0e14;
+  border:1px solid var(--soft);
+  color:#fff;
+  padding:12px;
+  margin:10px 0;
+}
+
+button.primary{
+  background:var(--gold);
+  color:#000;
+  padding:12px 20px;
+  border:none;
+  margin-top:10px;
+  cursor:pointer;
+}
+
+/* ===== ADMIN ===== */
+#adminBtn{display:none;}
+
+@media(max-width:900px){
+  aside{display:none;}
+  main,.scene{padding:40px;}
+}
 </style>
 </head>
+
 <body>
 
-<!-- Cinematic Layers -->
-<div class="layer grain"></div>
-<div class="layer light1"></div>
-<div class="layer light2"></div>
-<div class="floating-text" style="top:100px; left:300px;">MARQUER MARK</div>
-<div class="floating-text" style="top:400px; left:600px;">CREATIVES</div>
-
-<div class="app">
-  <aside>
-    <h1>Marquer Mark</h1>
-    <nav>
-      <button onclick="show('home')">Home</button>
-      <button onclick="show('about')">About</button>
-      <button onclick="show('portfolio')">Portfolio</button>
-      <button onclick="show('submit')">Submit Work</button>
-      <button onclick="show('contact')">Contact</button>
-      <button id="adminBtn" class="hidden" onclick="show('admin')">Admin Panel</button>
-    </nav>
-  </aside>
-
-  <main>
-    <section id="home" class="active">
-      <h2>Welcome to Marquer Mark Creatives</h2>
-      <p>A cinematic space where stories breathe and frames speak. This is your entrance into motion, mood, and narrative.</p>
-    </section>
-
-    <section id="about">
-      <h2>About</h2>
-      <p>I am Mark Mutugi — a visual storyteller working with videography, 3D, and cinematic composition to craft immersive experiences.</p>
-    </section>
-
-    <section id="portfolio">
-      <h2>Portfolio</h2>
-      <div id="portfolioContainer"><p>Approved projects will appear here.</p></div>
-    </section>
-
-    <section id="submit">
-      <h2>Submit Your Work</h2>
-      <input placeholder="Your Name">
-      <input placeholder="Email">
-      <input placeholder="Project Link (YouTube / Vimeo / OneDrive)">
-      <textarea placeholder="Short description"></textarea>
-      <button class="primary">Submit</button>
-    </section>
-
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>Email: marquermark345@gmail.com</p>
-      <p>Phone: +25498160452</p>
-    </section>
-
-    <section id="admin">
-      <h2>Admin Panel</h2>
-      <div id="adminPanel">
-        <p>Pending submissions appear here. Approve to add to portfolio.</p>
-      </div>
-    </section>
-  </main>
+<div id="atmosphere">
+  <div class="grain"></div>
+  <div class="light one"></div>
+  <div class="light two"></div>
+  <div class="light three"></div>
 </div>
 
+<div class="app">
+
+<aside>
+  <h1>Marquer Mark</h1>
+  <nav>
+    <button onclick="go('home')">Home</button>
+    <button onclick="go('about')">About</button>
+    <button onclick="go('portfolio')">Portfolio</button>
+    <button onclick="go('submit')">Submit</button>
+    <button onclick="go('contact')">Contact</button>
+    <button id="adminBtn" onclick="go('admin')">Admin</button>
+  </nav>
+</aside>
+
+<main>
+
+<section id="home" class="scene active">
+  <h2 class="breathe">Welcome to Marquer Mark Creatives</h2>
+  <p>
+    This is not a gallery.  
+    It is a living archive of motion, story, and atmosphere.
+    <br><br>
+    A place where cinema breathes — and ideas are allowed to linger.
+  </p>
+</section>
+
+<section id="about" class="scene">
+  <h2>About</h2>
+  <p>
+    I am Mark Mutugi — a videographer and visual storyteller driven by motion,
+    narrative, and cinematic language.
+    <br><br>
+    My work lives primarily in videography and documentary form, shaping stories
+    through composition, rhythm, and emotional pacing.
+    <br><br>
+    Alongside this, I explore 3D animation and modeling using Maya — building
+    environments, lighting, and lightweight motion to extend storytelling beyond
+    the lens.
+    <br><br>
+    My vision is to create work that immerses, connects, and evolves with the
+    changing dynamics of contemporary creativity.
+  </p>
+</section>
+
+<section id="portfolio" class="scene">
+  <h2>Portfolio</h2>
+  <p>
+    Approved works will live here — curated, persistent, and intentional.
+    Each project stands as a frame in an ongoing film.
+  </p>
+</section>
+
+<section id="submit" class="scene">
+  <h2>Submit Your Work</h2>
+  <p>Collaborators may submit their work for review.</p>
+  <input placeholder="Name">
+  <input placeholder="Email">
+  <input placeholder="Project Link">
+  <textarea placeholder="Description"></textarea>
+  <button class="primary">Submit</button>
+</section>
+
+<section id="contact" class="scene">
+  <h2>Contact</h2>
+  <p>
+    Email: marquermark345@gmail.com<br>
+    Phone: +25498160452
+  </p>
+</section>
+
+<section id="admin" class="scene">
+  <h2>Admin Panel</h2>
+  <p>Pending submissions and approvals will appear here.</p>
+</section>
+
+</main>
+</div>
+
+<!-- ===== FIREBASE READY (SILENT) ===== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyXXX-XXXXXX", // REPLACE WITH YOUR KEYS
+  apiKey: "AIzaSyCvz6Cqo-mn5P0vmWU_OAHcMBLLFtPNh88",
   authDomain: "marquer-mark-portfolios.firebaseapp.com",
   projectId: "marquer-mark-portfolios"
 };
 
-const ADMIN_EMAIL = "marquermark345@gmail.com";
+const ADMIN_EMAIL="marquermark345@gmail.com";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
 
-// Admin login flow
-onAuthStateChanged(auth, user => {
-  if(user && user.email === ADMIN_EMAIL){
-    document.getElementById('adminBtn').classList.remove('hidden');
+onAuthStateChanged(auth,user=>{
+  if(user && user.email===ADMIN_EMAIL){
+    document.getElementById("adminBtn").style.display="block";
   }
 });
+</script>
 
-// NAVIGATION
-window.show = (id) => {
-  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+<script>
+function go(id){
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-};
+}
 </script>
 
 </body>
