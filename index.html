@@ -2,62 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marquer Mark Creatives</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Google Font (cinematic, elegant) -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-1: #050508;
-      --bg-2: #0b0b12;
-      --panel: #0f0f18;
-      --accent: #d4af37;
-      --text: #f5f5f5;
-      --muted: #b5b5b5;
+      --bg: #0b0b0d;
+      --panel: #111217;
+      --accent: #d6b36a;
+      --soft: rgba(255,255,255,0.06);
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin:0; padding:0; }
 
     body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: radial-gradient(circle at top, #12121c, #050508 70%);
-      color: var(--text);
+      background: radial-gradient(circle at top, #14151c, #070709);
+      color: #eee;
+      font-family: Inter, sans-serif;
       overflow-x: hidden;
     }
 
-    /* ================= CINEMATIC ATMOSPHERE ================= */
-    .grain::before {
-      content: "";
+    /* CINEMATIC BACKGROUND */
+    .film-grain {
+      pointer-events: none;
       position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.06'/></svg>");
-      pointer-events: none;
-      z-index: 1000;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+      z-index: 1;
     }
 
-    .floating-light {
+    .light {
       position: fixed;
-      width: 420px;
-      height: 420px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(212,175,55,0.18), transparent 65%);
-      filter: blur(8px);
-      animation: drift 22s ease-in-out infinite alternate;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(214,179,106,.08), transparent 70%);
+      animation: drift 40s infinite alternate ease-in-out;
       z-index: 0;
     }
 
-    .light-a { top: 5%; left: -120px; }
-    .light-b { bottom: 10%; right: -140px; animation-delay: 6s; }
+    .light.one { top:-200px; left:-200px; }
+    .light.two { bottom:-250px; right:-250px; animation-duration: 55s; }
 
     @keyframes drift {
       from { transform: translate(0,0); }
-      to { transform: translate(120px,-80px); }
+      to { transform: translate(200px,150px); }
     }
 
-    /* ================= LAYOUT ================= */
+    /* LAYOUT */
     .app {
       display: flex;
       min-height: 100vh;
@@ -66,238 +60,206 @@
     }
 
     aside {
-      width: 260px;
-      background: linear-gradient(180deg, #0c0c14, #06060a);
-      padding: 32px 22px;
-      border-right: 1px solid rgba(255,255,255,0.05);
+      width: 240px;
+      background: var(--panel);
+      padding: 30px 20px;
+      border-right: 1px solid var(--soft);
     }
 
-    .brand {
-      font-family: 'Cinzel', serif;
-      font-size: 1.6rem;
-      letter-spacing: 3px;
+    aside h1 {
+      font-family: Cinzel, serif;
+      font-size: 20px;
+      margin-bottom: 30px;
       color: var(--accent);
-      margin-bottom: 45px;
     }
 
-    nav a {
-      display: block;
-      padding: 15px 14px;
-      margin-bottom: 6px;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 1px;
-      position: relative;
-      overflow: hidden;
-      transition: color 0.4s ease;
-    }
-
-    nav a::after {
-      content: "";
-      position: absolute;
-      left: -100%;
-      bottom: 0;
+    nav button {
       width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      transition: left 0.6s ease;
+      background: none;
+      border: none;
+      color: #aaa;
+      text-align: left;
+      padding: 12px;
+      cursor: pointer;
+      transition: .3s;
+      font-size: 15px;
     }
 
-    nav a:hover::after,
-    nav a.active::after {
-      left: 0;
-    }
-
-    nav a:hover,
-    nav a.active {
-      color: var(--text);
+    nav button:hover {
+      color: #fff;
+      background: rgba(255,255,255,.05);
     }
 
     main {
       flex: 1;
-      padding: 70px 9vw;
+      padding: 60px;
     }
 
     section {
       display: none;
-      animation: sectionReveal 1.2s cubic-bezier(.19,1,.22,1) forwards;
+      animation: fadeUp .8s ease forwards;
     }
 
     section.active { display: block; }
 
-    @keyframes sectionReveal {
-      from { opacity: 0; transform: translateY(40px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(20px); }
+      to { opacity:1; transform: translateY(0); }
     }
 
-    h1 {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(2.6rem, 5vw, 4.2rem);
-      letter-spacing: 4px;
-      margin-bottom: 22px;
+    h2 {
+      font-family: Cinzel, serif;
+      font-size: 38px;
+      margin-bottom: 20px;
     }
 
     p {
-      max-width: 720px;
-      line-height: 1.9;
-      color: var(--muted);
-      font-size: 1.1rem;
+      max-width: 650px;
+      line-height: 1.7;
+      color: #ccc;
     }
 
-    /* ================= HOME ================= */
-    .hero-line {
-      margin-top: 35px;
-      font-size: 1.25rem;
-      color: #dcdcdc;
-      animation: glowText 3s ease-in-out infinite alternate;
+    /* ADMIN PANEL */
+    #adminPanel {
+      margin-top: 40px;
+      padding: 20px;
+      border: 1px solid var(--soft);
+      background: rgba(255,255,255,.03);
     }
 
-    @keyframes glowText {
-      from { text-shadow: 0 0 8px rgba(212,175,55,0.15); }
-      to { text-shadow: 0 0 18px rgba(212,175,55,0.35); }
-    }
+    .hidden { display:none; }
 
-    /* ================= PORTFOLIO ================= */
-    .projects {
-      margin-top: 45px;
-      display: grid;
-      gap: 26px;
-    }
-
-    .project-card {
-      background: linear-gradient(160deg, #12121c, #08080d);
-      padding: 26px;
-      border-left: 3px solid var(--accent);
-      box-shadow: 0 0 0 rgba(212,175,55,0);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .project-card:hover {
-      transform: translateY(-6px) scale(1.01);
-      box-shadow: 0 10px 40px rgba(212,175,55,0.15);
-    }
-
-    /* ================= SUBMIT ================= */
-    form {
-      margin-top: 35px;
-      max-width: 520px;
-    }
-
+    /* FORMS */
     input, textarea {
       width: 100%;
-      padding: 14px;
-      margin-bottom: 16px;
-      background: #0c0c14;
-      border: 1px solid rgba(255,255,255,0.08);
-      color: white;
-      font-size: 0.95rem;
+      margin: 10px 0;
+      padding: 10px;
+      background: #0f1016;
+      border: 1px solid var(--soft);
+      color: #fff;
     }
 
-    button {
-      background: linear-gradient(135deg, #d4af37, #b8962e);
+    button.primary {
+      background: var(--accent);
+      color: #000;
+      padding: 10px 18px;
       border: none;
-      padding: 14px 26px;
-      font-weight: 600;
-      letter-spacing: 1px;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      margin-top: 10px;
     }
 
-    button:hover { transform: scale(1.05); }
-
-    footer {
-      margin-top: 70px;
-      font-size: 0.85rem;
-      color: #777;
-    }
-
-    @media (max-width: 900px) {
-      aside { display: none; }
-      main { padding: 50px 22px; }
+    @media(max-width:768px){
+      aside { display:none; }
+      main { padding:30px; }
     }
   </style>
 </head>
-<body class="grain">
 
-  <div class="floating-light light-a"></div>
-  <div class="floating-light light-b"></div>
+<body>
 
-  <div class="app">
-    <aside>
-      <div class="brand">MARQUER<br>MARK</div>
-      <nav>
-        <a href="#" class="active" onclick="showSection('home', this)">Home</a>
-        <a href="#" onclick="showSection('about', this)">About</a>
-        <a href="#" onclick="showSection('portfolio', this)">Portfolio</a>
-        <a href="#" onclick="showSection('submit', this)">Submit</a>
-        <a href="#" onclick="showSection('contact', this)">Contact</a>
-      </nav>
-    </aside>
+<div class="film-grain"></div>
+<div class="light one"></div>
+<div class="light two"></div>
 
-    <main>
-      <section id="home" class="active">
-        <h1>Welcome</h1>
-        <p class="hero-line">To Marquer Mark Creatives — a living cinematic space for motion, story, and immersive visual expression.</p>
-      </section>
+<div class="app">
 
-      <section id="about">
-        <h1>About</h1>
-        <p>
-          I am Mark Mutugi, a filmmaker driven by videography, documentary storytelling, and cinematic language.
-          My work leans toward motion, rhythm, and atmosphere — creating experiences rather than just visuals.
-        </p>
-        <p>
-          I also explore 3D animation and modeling in Maya, focusing on form, light, and subtle motion to expand narrative possibilities.
-        </p>
-        <p>
-          My vision is to create immersive, emotionally resonant work that evolves with the shifting dynamics of modern creative culture.
-        </p>
-      </section>
+  <aside>
+    <h1>Marquer Mark</h1>
+    <nav>
+      <button onclick="show('home')">Home</button>
+      <button onclick="show('about')">About</button>
+      <button onclick="show('portfolio')">Portfolio</button>
+      <button onclick="show('submit')">Submit Work</button>
+      <button onclick="show('contact')">Contact</button>
+      <button id="adminBtn" class="hidden" onclick="show('admin')">Admin Panel</button>
+    </nav>
+  </aside>
 
-      <section id="portfolio">
-        <h1>Portfolio</h1>
-        <p>Approved works curated from collaborations and personal projects.</p>
-        <div class="projects" id="projectList"></div>
-      </section>
+  <main>
+    <section id="home" class="active">
+      <h2>Welcome to Marquer Mark Creatives</h2>
+      <p>
+        A cinematic space for storytelling, motion, and immersive visual experiences.
+        This is where ideas breathe, frames speak, and stories live beyond the screen.
+      </p>
+    </section>
 
-      <section id="submit">
-        <h1>Submit Work</h1>
-        <p>Collaborators may submit project links for approval.</p>
-        <form>
-          <input placeholder="Project title" required />
-          <input placeholder="Your name" required />
-          <input placeholder="Contact email" required />
-          <input placeholder="Project link" required />
-          <textarea placeholder="Short description"></textarea>
-          <button type="submit">Submit for review</button>
-        </form>
-      </section>
+    <section id="about">
+      <h2>About</h2>
+      <p>
+        I am Mark Mutugi — a videographer and visual storyteller focused on motion,
+        atmosphere, and narrative-driven work. My practice leans heavily into
+        videography, documentary language, and cinematic composition.
+        <br><br>
+        I also work with 3D — Maya-based modeling, lighting, and lightweight animation —
+        to extend storytelling beyond the physical lens.
+        <br><br>
+        My vision is to bring stories and ideas to life in ways that immerse, connect,
+        and evolve with the ever-changing creative landscape.
+      </p>
+    </section>
 
-      <section id="contact">
-        <h1>Contact</h1>
-        <p>Email: marquermark345@gmail.com</p>
-        <p>Phone: +25498160452</p>
-      </section>
+    <section id="portfolio">
+      <h2>Portfolio</h2>
+      <p>Approved works will appear here. Persistent, curated, and public.</p>
+    </section>
 
-      <footer>
-        © Marquer Mark Creatives — Cinematic storytelling & future collaborations
-      </footer>
-    </main>
-  </div>
+    <section id="submit">
+      <h2>Submit Your Work</h2>
+      <p>Collaborators may submit their projects for review.</p>
+      <input placeholder="Name">
+      <input placeholder="Email">
+      <input placeholder="Project Link (OneDrive / YouTube / Vimeo)">
+      <textarea placeholder="Short description"></textarea>
+      <button class="primary">Submit</button>
+    </section>
 
-  <script>
-    function showSection(id, el) {
-      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-      el.classList.add('active');
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>
+        Email: marquermark345@gmail.com<br>
+        Phone: +25498160452
+      </p>
+    </section>
+
+    <section id="admin">
+      <h2>Admin Panel</h2>
+      <div id="adminPanel">
+        <p>Pending submissions will appear here for approval.</p>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<script type="module">
+  // --- FIREBASE AUTH HOOK (LOGIC ONLY) ---
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCvz6Cqo-mN...",
+    authDomain: "marquer-mark-portfolios.firebaseapp.com",
+    projectId: "marquer-mark-portfolios"
+  };
+
+  const ADMIN_EMAIL = "marquermark345@gmail.com";
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user && user.email === ADMIN_EMAIL) {
+      document.getElementById("adminBtn").classList.remove("hidden");
     }
+  });
 
-    /* FIREBASE INTEGRATION READY
-       - Auth will identify admin vs guest
-       - Firestore will load approved projects
-       - Submissions saved as approved:false
-    */
-  </script>
+  // --- NAV ---
+  window.show = (id) => {
+    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  };
+</script>
+
 </body>
 </html>
